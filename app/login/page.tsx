@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookF,
   faInstagram,
@@ -40,7 +40,7 @@ export default function Login() {
           </div>
           <div className="mb-6">
             <label
-              htmlFor="email"
+              htmlFor="password"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
               <FontAwesomeIcon
@@ -57,6 +57,28 @@ export default function Login() {
                 className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
                 placeholder="Enter your password"
               />
+            </div>
+          </div>
+          <div className="mb-6">
+            <label
+              htmlFor="role"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              <FontAwesomeIcon
+                icon={faUser}
+                className="mr-2 inline-block w-3.5"
+              />
+              Select a Role
+            </label>
+            <div>
+              <select
+                name="role"
+                id="role"
+                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
+              >
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+              </select>
             </div>
           </div>
           <div className="flex items-center justify-center">
