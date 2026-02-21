@@ -2,17 +2,19 @@
 import Link from "next/link";
 import axios from "axios";
 import React from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-export default function SignUp() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+import {
+  faFacebookF,
+  faInstagram,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -20,23 +22,21 @@ export default function SignUp() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      toast.error("Password do not match");
+    if (!email || !password || !role) {
+      toast.error("Please fill all fields");
       return;
     }
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/register", {
-        firstName,
-        lastName,
+      const response = await axios.post("/api/login", {
         email,
         password,
         role,
       });
       console.log(response.data);
-      toast.success("Account created successfully!");
-      router.push("/login");
+      toast.success("Logged in successfully!");
+      router.push("/dashboard");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong!");
@@ -47,62 +47,13 @@ export default function SignUp() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <Toaster position="top-right" />
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-        <h2 className="text-3xl font-bold mb-6 text-center text-white">
+      <div className="bg-white  shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+        <h2 className="text-3xl font-bold mb-6 text-center">
           <span className="bg-linear-to-r text-transparent from-green-500 to-yellow-500 bg-clip-text">
-            SignUp
+            Login
           </span>
         </h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label
-              htmlFor="firstName"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              <FontAwesomeIcon
-                icon={faUser}
-                className="mr-2 inline-block w-3.5"
-              />
-              First Name
-            </label>
-            <div>
-              <input
-                type="text"
-                required
-                id="firstName"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                autoComplete="off"
-                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
-                placeholder="Enter your first name"
-              />
-            </div>
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="lastName"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              <FontAwesomeIcon
-                icon={faUser}
-                className="mr-2 inline-block w-3.5"
-              />
-              Last Name
-            </label>
-            <div>
-              <input
-                type="text"
-                id="lastName"
-                value={lastName}
-                required
-                onChange={(e) => setLastName(e.target.value)}
-                autoComplete="off"
-                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
-                placeholder="Enter your last name"
-              />
-            </div>
-          </div>
           <div className="mb-6">
             <label
               htmlFor="email"
@@ -117,17 +68,15 @@ export default function SignUp() {
             <div>
               <input
                 type="email"
-                id="email"
                 value={email}
-                required
                 onChange={(e) => setEmail(e.target.value)}
+                id="email"
                 autoComplete="off"
                 className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
                 placeholder="Enter your email"
               />
             </div>
           </div>
-
           <div className="mb-6">
             <label
               htmlFor="password"
@@ -144,35 +93,10 @@ export default function SignUp() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
                 id="password"
                 autoComplete="off"
                 className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
                 placeholder="Enter your password"
-              />
-            </div>
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="confirmPassword"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              <FontAwesomeIcon
-                icon={faLock}
-                className="mr-2 inline-block w-3.5"
-              />
-              Confrim Password
-            </label>
-            <div>
-              <input
-                type="password"
-                value={confirmPassword}
-                required
-                id="confirmPassword"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                autoComplete="off"
-                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
-                placeholder="Confirm password"
               />
             </div>
           </div>
@@ -190,13 +114,11 @@ export default function SignUp() {
             <div>
               <select
                 name="role"
-                id="role"
                 value={role}
-                required
                 onChange={(e) => setRole(e.target.value)}
+                id="role"
                 className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
               >
-                <option value="">Select an option</option>
                 <option value="admin">Admin</option>
                 <option value="user">User</option>
               </select>
@@ -206,18 +128,49 @@ export default function SignUp() {
             <button
               type="submit"
               disabled={loading}
-              className=" transform hover:scale-105 transition duration-400 bg-linear-to-r from-yellow-500 to-green-500 hover:from-green-700 hover:to-yellow-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+              className="transform hover:scale-105 transition duration-400 bg-linear-to-r from-yellow-500 to-green-500 hover:from-green-700 hover:to-yellow-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             >
-              {loading ? "Registering..." : "Sign Up"}
+              {loading ? "Logging in..." : "Log in"}
             </button>
+          </div>
+          <div className="text-center mt-4">
+            <Link href="/" className="text-gray-700 hover:underline">
+              Forget Password?
+            </Link>
           </div>
         </form>
         <p className="text-center text-gray-700 mt-6">
-          Already have an account?{" "}
-          <Link href="/login" className="text-blue-600 hover:underline">
-            Login
+          Do not have an account?{" "}
+          <Link href="/" className="text-blue-600 hover:underline">
+            Sign Up
           </Link>
         </p>
+        <div className="mt-4">
+          <p className="text-center text-gray-700"> or log in with: </p>
+          <div className="flex justify-center mt-2">
+            <Link
+              href="http://www.facebook.com"
+              target="_blank"
+              className="bg-green-600 transform hover:scale-105 transition duration-400 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mx-2 "
+            >
+              <FontAwesomeIcon icon={faFacebookF} className=" w-2" />
+            </Link>
+            <Link
+              href="http://www.instagram.com"
+              target="_blank"
+              className="bg-green-600 transform hover:scale-105 transition duration-400  hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mx-2 "
+            >
+              <FontAwesomeIcon icon={faInstagram} className=" w-4" />
+            </Link>
+            <Link
+              href="http://www.twitter.com"
+              target="_blank"
+              className="bg-green-600 transform hover:scale-105 transition duration-400 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mx-2 "
+            >
+              <FontAwesomeIcon icon={faTwitter} className=" w-4" />
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
