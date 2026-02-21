@@ -206,7 +206,7 @@ export default function SignUp() {
             <button
               type="submit"
               disabled={loading}
-              className="bg-linear-to-r from-yellow-500 to-green-500 hover:from-green-700 hover:to-yellow-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+              className=" transform hover:scale-105 transition duration-400 bg-linear-to-r from-yellow-500 to-green-500 hover:from-green-700 hover:to-yellow-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             >
               {loading ? "Registering..." : "Sign Up"}
             </button>

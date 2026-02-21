@@ -47,7 +47,7 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+      <div className="bg-white  shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
         <h2 className="text-3xl font-bold mb-6 text-center">
           <span className="bg-linear-to-r text-transparent from-green-500 to-yellow-500 bg-clip-text">
             Login
@@ -128,7 +128,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="bg-linear-to-r from-yellow-500 to-green-500 hover:from-green-700 hover:to-yellow-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+              className="transform hover:scale-105 transition duration-400 bg-linear-to-r from-yellow-500 to-green-500 hover:from-green-700 hover:to-yellow-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             >
               {loading ? "Logging in..." : "Log in"}
             </button>
@@ -151,21 +151,21 @@ export default function Login() {
             <Link
               href="http://www.facebook.com"
               target="_blank"
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2 "
+              className="bg-green-600 transform hover:scale-105 transition duration-400 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mx-2 "
             >
               <FontAwesomeIcon icon={faFacebookF} className=" w-2" />
             </Link>
             <Link
               href="http://www.instagram.com"
               target="_blank"
-              className="bg-green-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mx-2 "
+              className="bg-green-600 transform hover:scale-105 transition duration-400  hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mx-2 "
             >
               <FontAwesomeIcon icon={faInstagram} className=" w-4" />
             </Link>
             <Link
               href="http://www.twitter.com"
               target="_blank"
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2 "
+              className="bg-green-600 transform hover:scale-105 transition duration-400 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mx-2 "
             >
               <FontAwesomeIcon icon={faTwitter} className=" w-4" />
             </Link>
