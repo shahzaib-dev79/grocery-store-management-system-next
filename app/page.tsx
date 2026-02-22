@@ -1,12 +1,3 @@
-export default function Home() {
-  return (
-    <div className="flex items-center justify-center min-h-[80vh]">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-green-600 mb-4">
-          Welcome to Grocery Admin Panel
-        </h1>
-        <p className="text-gray-600 text-lg">
-          Manage your products, orders, and users efficiently.
 "use client";
 import Link from "next/link";
 import axios from "axios";
@@ -36,16 +27,19 @@ export default function SignUp() {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/register", {
-        firstName,
-        lastName,
-        email,
-        password,
-        role,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/users/register",
+        {
+          firstName,
+          lastName,
+          email,
+          password,
+          role,
+        },
+      );
       console.log(response.data);
       toast.success("Account created successfully!");
-      router.push("/login");
+      router.push("/admin");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong!");

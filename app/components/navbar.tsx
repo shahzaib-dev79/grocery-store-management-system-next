@@ -19,9 +19,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <ShoppingCart size={30} className="text-green-600" />
-          <span className="text-xl font-bold text-gray-800">
-            GroceryHub
-          </span>
+          <span className="text-xl font-bold text-gray-800">GroceryHub</span>
         </div>
 
         <div className="hidden md:flex items-center gap-8">
