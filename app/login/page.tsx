@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
 import axios from "axios";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,13 +14,13 @@ import {
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("admin");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    console.log("Form submitted");
     if (!email || !password || !role) {
       toast.error("Please fill all fields");
       return;
@@ -40,9 +39,9 @@ export default function Login() {
       console.log(response.data);
       toast.success("Logged in successfully!");
       router.push("/admin");
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong!");
+    } catch (error: any) {
+      console.log("Axios error:", error.response?.data || error.message);
+      toast.error(error.response?.data?.msg || "Something went wrong!");
     } finally {
       setLoading(false);
     }
@@ -123,7 +122,7 @@ export default function Login() {
                 className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
               >
                 <option value="admin">Admin</option>
-                <option value="user">User</option>
+                <option value="cashier">Cashier</option>
               </select>
             </div>
           </div>

@@ -34,6 +34,7 @@ export default function SignUp() {
           lastName,
           email,
           password,
+          confirmPassword,
           role,
         },
       );
@@ -201,7 +202,7 @@ export default function SignUp() {
               >
                 <option value="">Select an option</option>
                 <option value="admin">Admin</option>
-                <option value="user">User</option>
+                <option value="cashier">Cashier</option>
               </select>
             </div>
           </div>
@@ -209,7 +210,7 @@ export default function SignUp() {
             <button
               type="submit"
               disabled={loading}
-              className=" transform hover:scale-105 transition duration-400 bg-linear-to-r from-yellow-500 to-green-500 hover:from-green-700 hover:to-yellow-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+              className=" transform hover:scale-105 cursor-pointer transition duration-400 bg-linear-to-r from-yellow-500 to-green-500 hover:from-green-700 hover:to-yellow-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             >
               {loading ? "Registering..." : "Sign Up"}
             </button>
@@ -217,8 +218,10 @@ export default function SignUp() {
         </form>
         <p className="text-center text-gray-700 mt-6">
           Already have an account?{" "}
-          <Link href="/login" className="text-blue-600 hover:underline">
-            Login
+          <Link href="/login">
+            <span className="text-blue-600 hover:underline cursor-pointer">
+              Login
+            </span>
           </Link>
         </p>
       </div>
