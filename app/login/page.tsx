@@ -29,14 +29,17 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/login", {
-        email,
-        password,
-        role,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/users/login",
+        {
+          email,
+          password,
+          role,
+        },
+      );
       console.log(response.data);
       toast.success("Logged in successfully!");
-      router.push("/dashboard");
+      router.push("/admin");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong!");
@@ -134,7 +137,10 @@ export default function Login() {
             </button>
           </div>
           <div className="text-center mt-4">
-            <Link href="/" className="text-gray-700 hover:underline">
+            <Link
+              href="/forget-password"
+              className="text-gray-700 hover:underline"
+            >
               Forget Password?
             </Link>
           </div>

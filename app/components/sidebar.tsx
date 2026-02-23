@@ -29,9 +29,7 @@ export default function Sidebar() {
 
   return (
     <aside className="hidden md:flex flex-col w-64 h-screen bg-white shadow-lg p-6">
-      <h2 className="text-lg font-semibold text-gray-700 mb-8">
-        Admin Menu
-      </h2>
+      <h2 className="text-lg font-semibold text-gray-700 mb-8">Admin Menu</h2>
 
       <nav className="flex flex-col gap-4">
         {menuItems.map((item) => {
