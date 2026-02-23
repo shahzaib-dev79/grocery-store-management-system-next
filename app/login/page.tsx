@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
 import axios from "axios";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -123,7 +122,7 @@ export default function Login() {
                 className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
               >
                 <option value="admin">Admin</option>
-                <option value="user">User</option>
+                <option value="cashier">Cashier</option>
               </select>
             </div>
           </div>
