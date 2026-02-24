@@ -202,7 +202,7 @@ export default function SignUp() {
               >
                 <option value="">Select an option</option>
                 <option value="admin">Admin</option>
-                <option value="cashier">Cashier</option>
+                <option value="cashier">User</option>
               </select>
             </div>
           </div>

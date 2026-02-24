@@ -49,6 +49,7 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
+      <Toaster position="top-right" />
       <div className="bg-white  shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
         <h2 className="text-3xl font-bold mb-6 text-center">
           <span className="bg-linear-to-r text-transparent from-green-500 to-yellow-500 bg-clip-text">
@@ -122,7 +123,7 @@ export default function Login() {
                 className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
               >
                 <option value="admin">Admin</option>
-                <option value="cashier">Cashier</option>
+                <option value="cashier">User</option>
               </select>
             </div>
           </div>
