@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import axios from "axios";
+import { login } from "../../services/auth.api";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
@@ -28,20 +29,13 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/v1/users/login",
-        {
-          email,
-          password,
-          role,
-        },
-      );
-      console.log(response.data);
+      const response = await login(email, password, role);
       toast.success("Logged in successfully!");
+
       router.push("/admin");
     } catch (error: any) {
       console.log("Axios error:", error.response?.data || error.message);
-      toast.error(error.response?.data?.msg || "Something went wrong!");
+      toast.error(error.response?.data?.msg || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -123,7 +117,7 @@ export default function Login() {
                 className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
               >
                 <option value="admin">Admin</option>
-                <option value="cashier">User</option>
+                <option value="user">User</option>
               </select>
             </div>
           </div>

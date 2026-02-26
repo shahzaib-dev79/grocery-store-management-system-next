@@ -7,6 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { register } from "../services/auth.api";
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -27,74 +28,70 @@ export default function SignUp() {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/v1/users/register",
-        {
-          firstName,
-          lastName,
-          email,
-          password,
-          confirmPassword,
-          role,
-        },
+      const response = await register(
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+        role,
       );
-      console.log(response.data);
+
       toast.success("Account created successfully!");
+
       router.push("/admin");
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong!");
+      toast.error("Registeration failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
       <Toaster position="top-right" />
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-xl">
         <h2 className="text-3xl font-bold mb-6 text-center text-white">
           <span className="bg-linear-to-r text-transparent from-green-500 to-yellow-500 bg-clip-text">
             SignUp
           </span>
         </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label
-              htmlFor="firstName"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              <FontAwesomeIcon
-                icon={faUser}
-                className="mr-2 inline-block w-3.5"
-              />
-              First Name
-            </label>
-            <div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <label
+                htmlFor="firstName"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="mr-2 inline-block w-3.5"
+                />
+                First Name
+              </label>
               <input
                 type="text"
-                required
                 id="firstName"
                 value={firstName}
+                required
                 onChange={(e) => setFirstName(e.target.value)}
                 autoComplete="off"
-                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
+                className="shadow border rounded w-full max-w-full py-2 px-3 text-gray-700 focus:shadow-outline"
                 placeholder="Enter your first name"
               />
             </div>
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="lastName"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              <FontAwesomeIcon
-                icon={faUser}
-                className="mr-2 inline-block w-3.5"
-              />
-              Last Name
-            </label>
-            <div>
+            <div className="flex-1">
+              <label
+                htmlFor="lastName"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="mr-2 inline-block w-3.5"
+                />
+                Last Name
+              </label>
               <input
                 type="text"
                 id="lastName"
@@ -102,12 +99,13 @@ export default function SignUp() {
                 required
                 onChange={(e) => setLastName(e.target.value)}
                 autoComplete="off"
-                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
+                className="shadow border rounded w-full max-w-full py-2 px-3 text-gray-700 focus:shadow-outline"
                 placeholder="Enter your last name"
               />
             </div>
           </div>
-          <div className="mb-6">
+
+          <div>
             <label
               htmlFor="email"
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -118,21 +116,19 @@ export default function SignUp() {
               />
               Email
             </label>
-            <div>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                required
-                onChange={(e) => setEmail(e.target.value)}
-                autoComplete="off"
-                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
-                placeholder="Enter your email"
-              />
-            </div>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              required
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="off"
+              className="shadow border rounded w-full max-w-full py-2 px-3 text-gray-700 focus:shadow-outline"
+              placeholder="Enter your email"
+            />
           </div>
 
-          <div className="mb-6">
+          <div>
             <label
               htmlFor="password"
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -143,20 +139,19 @@ export default function SignUp() {
               />
               Password
             </label>
-            <div>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                id="password"
-                autoComplete="off"
-                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
-                placeholder="Enter your password"
-              />
-            </div>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="off"
+              className="shadow border rounded w-full max-w-full py-2 px-3 text-gray-700 focus:shadow-outline"
+              placeholder="Enter your password"
+            />
           </div>
-          <div className="mb-6">
+
+          <div>
             <label
               htmlFor="confirmPassword"
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -165,22 +160,21 @@ export default function SignUp() {
                 icon={faLock}
                 className="mr-2 inline-block w-3.5"
               />
-              Confrim Password
+              Confirm Password
             </label>
-            <div>
-              <input
-                type="password"
-                value={confirmPassword}
-                required
-                id="confirmPassword"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                autoComplete="off"
-                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
-                placeholder="Confirm password"
-              />
-            </div>
+            <input
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              required
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              autoComplete="off"
+              className="shadow border rounded w-full max-w-full py-2 px-3 text-gray-700 focus:shadow-outline"
+              placeholder="Confirm password"
+            />
           </div>
-          <div className="mb-6">
+
+          <div>
             <label
               htmlFor="role"
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -191,31 +185,28 @@ export default function SignUp() {
               />
               Select a Role
             </label>
-            <div>
-              <select
-                name="role"
-                id="role"
-                value={role}
-                required
-                onChange={(e) => setRole(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:shadow-outline"
-              >
-                <option value="">Select an option</option>
-                <option value="admin">Admin</option>
-                <option value="cashier">User</option>
-              </select>
-            </div>
-          </div>
-          <div className="flex items-center justify-center">
-            <button
-              type="submit"
-              disabled={loading}
-              className=" transform hover:scale-105 cursor-pointer transition duration-400 bg-linear-to-r from-yellow-500 to-green-500 hover:from-green-700 hover:to-yellow-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+            <select
+              id="role"
+              value={role}
+              required
+              onChange={(e) => setRole(e.target.value)}
+              className="shadow border rounded w-full max-w-full py-2 px-3 text-gray-700 focus:shadow-outline"
             >
-              {loading ? "Registering..." : "Sign Up"}
-            </button>
+              <option value="">Select an option</option>
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+            </select>
           </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-linear-to-r from-yellow-500 to-green-500 hover:from-green-700 hover:to-yellow-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-400"
+          >
+            {loading ? "Registering..." : "Sign Up"}
+          </button>
         </form>
+
         <p className="text-center text-gray-700 mt-6">
           Already have an account?{" "}
           <Link href="/login">
