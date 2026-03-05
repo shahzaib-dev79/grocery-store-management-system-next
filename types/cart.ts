@@ -11,7 +11,7 @@ export interface CartItem {
   _id: string;
   product: Product | string;
   name: string;
-  proce: number;
+  price: number;
   quantity: number;
 }
 
