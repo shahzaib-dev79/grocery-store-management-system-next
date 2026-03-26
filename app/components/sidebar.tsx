@@ -1,23 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Package,
   ShoppingCart,
   Users,
+  Megaphone,
   X,
 } from "lucide-react";
 
 type SidebarProps = {
   isOpen: boolean;
-  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSidebarOpen: (open: boolean) => void;
 };
 
 export default function Sidebar({ isOpen, setSidebarOpen }: SidebarProps) {
+  const pathname = usePathname();
+
   const menuItems = [
-    { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
+    { name: "Dashboard", icon: LayoutDashboard, path: "/admin" },
     { name: "Products", icon: Package, path: "/products" },
+    { name: "Marketing", icon: Megaphone, path: "/marketingtool" },
     { name: "Orders", icon: ShoppingCart, path: "/orders" },
     { name: "Users", icon: Users, path: "/users" },
   ];
@@ -26,7 +31,7 @@ export default function Sidebar({ isOpen, setSidebarOpen }: SidebarProps) {
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40"
+          className="fixed inset-0 bg-black/40 z-40 transition-opacity"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -38,7 +43,7 @@ export default function Sidebar({ isOpen, setSidebarOpen }: SidebarProps) {
       >
         <button
           onClick={() => setSidebarOpen(false)}
-          className="absolute top-5 right-5"
+          className="absolute top-5 right-5 text-gray-500 hover:text-black"
         >
           <X size={22} />
         </button>
@@ -48,15 +53,21 @@ export default function Sidebar({ isOpen, setSidebarOpen }: SidebarProps) {
             Admin Menu
           </h2>
 
-          <nav className="flex flex-col gap-4">
+          <nav className="flex flex-col gap-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
+              const isActive = pathname === item.path;
+
               return (
                 <Link
                   key={item.name}
                   href={item.path}
                   onClick={() => setSidebarOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-green-100 hover:text-green-600 transition"
+                  className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+                    isActive
+                      ? "bg-green-100 text-green-600 font-bold"
+                      : "text-gray-700 hover:bg-green-50 hover:text-green-600"
+                  }`}
                 >
                   <Icon size={20} />
                   <span>{item.name}</span>
