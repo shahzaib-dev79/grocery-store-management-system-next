@@ -5,7 +5,7 @@ import { Users, Mail, Phone, ShoppingBag, MoreHorizontal, ExternalLink, Filter }
 const CustomerManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Sample Customer Data (Login based)
+  
   const [customers] = useState([
     { 
       id: "CUS-8821", 
@@ -46,7 +46,7 @@ const CustomerManagement = () => {
 
   return (
     <div className="p-8 bg-[#0a0a0a] min-h-screen text-white">
-      {/* Page Header */}
+    
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -73,7 +73,7 @@ const CustomerManagement = () => {
         </div>
       </div>
 
-      {/* Main Table */}
+    
       <div className="bg-[#1a1a1a] border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
