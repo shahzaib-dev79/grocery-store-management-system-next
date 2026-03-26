@@ -13,9 +13,9 @@ export default function Navbar({ setSidebarOpen }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: "Dashboard", path: "/dashboard" },
+    { name: "Dashboard", path: "/admin" },
     { name: "Products", path: "/products" },
-    { name: "Orders", path: "/orders" },
+    { name: "Orders", path: "/admin/orders" },
     { name: "Users", path: "/users" },
   ];
 
