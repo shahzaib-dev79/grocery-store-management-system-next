@@ -5,14 +5,14 @@ import { Shield, User, Clock, Eye, Trash2, Search } from 'lucide-react';
 const UserRolesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Sample data based on your login roles
+  
   const [users, setUsers] = useState([
     { id: 1, name: "Ansa Asghar", email: "ansa@example.com", role: "admin", lastLogin: "2026-03-25 10:00 AM", status: "Active" },
     { id: 2, name: "Shahzad", email: "shahzad@example.com", role: "user", lastLogin: "2026-03-24 08:30 PM", status: "Active" },
     { id: 3, name: "Ali Khan", email: "ali@test.com", role: "user", lastLogin: "2026-03-25 09:15 AM", status: "Inactive" },
   ]);
 
-  // Filter users based on search (email or name)
+  
   const filteredUsers = users.filter(user => 
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -20,10 +20,9 @@ const UserRolesPage = () => {
 
   return (
     <div className="p-8 bg-[#0a0a0a] min-h-screen text-white">
-      {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-green-500 to-yellow-500 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-gradient-linear from-green-500 to-yellow-500 bg-clip-text text-transparent">
             User Roles & Activity
           </h1>
           <p className="text-zinc-500 mt-1">Manage permissions and track user login history.</p>
@@ -40,7 +39,7 @@ const UserRolesPage = () => {
         </div>
       </div>
 
-      {/* Roles Stats */}
+      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-[#1a1a1a] p-5 rounded-2xl border border-zinc-800 flex items-center gap-4">
           <div className="p-3 bg-blue-500/10 rounded-xl text-blue-500"><Shield size={24} /></div>
@@ -52,7 +51,7 @@ const UserRolesPage = () => {
         </div>
       </div>
 
-      {/* Users Table */}
+    
       <div className="bg-[#1a1a1a] border border-zinc-800 rounded-2xl overflow-hidden">
         <table className="w-full text-left">
           <thead className="bg-zinc-900/50 text-zinc-400 text-sm uppercase">
