@@ -23,7 +23,7 @@ export default function Sidebar({ isOpen, setSidebarOpen }: SidebarProps) {
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin" },
     { name: "Products", icon: Package, path: "/products" },
     { name: "Marketing", icon: Megaphone, path: "/marketingtool" },
-    { name: "Orders", icon: ShoppingCart, path: "/orders" },
+    { name: "Orders", icon: ShoppingCart, path: "/admin/orders" },
     { name: "Users", icon: Users, path: "/users" },
   ];
 
