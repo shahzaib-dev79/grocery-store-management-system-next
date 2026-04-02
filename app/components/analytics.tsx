@@ -49,6 +49,7 @@ export default function AnalyticsDashboard() {
 
   return (
     <div className="mt-6">
+      {" "}
       <h2 className="font-bold mb-4 text-2xl">Analytics Stats</h2>
       <div className="grid md:grid-cols-3 gap-6">
         <div className="bg-white shadow rounded-xl p-5">

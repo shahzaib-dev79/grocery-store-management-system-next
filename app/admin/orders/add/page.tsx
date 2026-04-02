@@ -6,7 +6,7 @@ import http from "@/services/http";
 
 interface Product {
   _id: string;
-  productName: string;
+  name: string;
   price: number;
   category: string;
 }
@@ -37,7 +37,7 @@ export default function OrderAddPage() {
   const fetchProducts = async () => {
     try {
       const res = await http.get("/products");
-      setProducts(res.data.data || []);
+      setProducts(res.data || []);
     } catch (err) {
       setError("Failed to fetch products");
     }
@@ -66,7 +66,7 @@ export default function OrderAddPage() {
       const prod = products.find((p) => p._id === value);
       if (prod) {
         item.productId = prod._id;
-        item.productName = prod.productName;
+        item.productName = prod.name;
         item.price = prod.price;
         item.total = prod.price * item.quantity;
       }
@@ -143,7 +143,7 @@ export default function OrderAddPage() {
             <option value="">Select Product</option>
             {products.map((p) => (
               <option key={p._id} value={p._id}>
-                {p.productName} (Rs. {p.price})
+                {p.name} (Rs. {p.price})
               </option>
             ))}
           </select>
@@ -194,7 +194,7 @@ export default function OrderAddPage() {
       </div>
 
       <div className="mb-4 text-right font-semibold text-lg">
-        Total: Rs. {totalAmount.toLocaleString()}
+        Total: Rs. {totalAmount.toLocaleString()} //total amount
       </div>
 
       <button
