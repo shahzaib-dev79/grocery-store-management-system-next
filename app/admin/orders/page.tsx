@@ -1,4 +1,4 @@
-"use client";
+"use client"; // browser side p run hony k lye
 
 import { useEffect, useState } from "react";
 import http from "@/services/http";
@@ -71,6 +71,7 @@ export default function OrdersPage() {
       <div className="bg-white shadow rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
+            {" "}
             <thead className="bg-gray-100">
               <tr>
                 <th className="px-4 py-2 text-left">Customer</th>
@@ -80,13 +81,13 @@ export default function OrdersPage() {
                 <th className="px-4 py-2 text-center">Actions</th>
               </tr>
             </thead>
-
             <tbody>
               {filteredOrders.map((order) => (
                 <tr key={order._id} className="border-t">
                   <td className="px-4 py-2">{order.customerName}</td>
                   <td className="px-4 py-2">
-                    Rs. {order.totalAmount.toLocaleString()}
+                    Rs. {order.totalAmount.toLocaleString()} //amount ko pattern
+                    se rkhna 1000 ko 1,000 k sath
                   </td>
                   <td className="px-4 py-2">
                     <span
@@ -105,6 +106,7 @@ export default function OrdersPage() {
                   </td>
                   <td className="px-4 py-2">
                     {new Date(order.createdAt).toLocaleDateString()}
+                    format
                   </td>
                   <td className="px-4 py-2 text-center space-x-2">
                     <button
