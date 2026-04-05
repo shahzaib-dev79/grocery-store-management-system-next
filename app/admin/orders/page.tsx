@@ -1,9 +1,10 @@
-"use client"; // browser side p run hony k lye
+"use client";
 
 import { useEffect, useState } from "react";
 import http from "@/services/http";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 
 type Order = {
   _id: string;
@@ -56,13 +57,21 @@ export default function OrdersPage() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Order Management</h1>
+      <div className="mb-4">
+        <button
+          onClick={() => router.push("/admin")}
+          className="bg-gray-200 hover:bg-gray-500 hover:text-white text-gray-700 px-4 py-2 rounded-lg transition"
+        >
+          <ArrowLeft size={18} />
+        </button>
+      </div>
+      <h1 className="text-2xl font-bold mb-6 mt-8">Order Management</h1>
       <div className="flex justify-end mb-4">
         <button
           onClick={() => router.push("/admin/orders/add")}
           className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-900 "
         >
-          + Create Order
+          Create Order
         </button>
       </div>
 
@@ -86,8 +95,7 @@ export default function OrdersPage() {
                 <tr key={order._id} className="border-t">
                   <td className="px-4 py-2">{order.customerName}</td>
                   <td className="px-4 py-2">
-                    Rs. {order.totalAmount.toLocaleString()} //amount ko pattern
-                    se rkhna 1000 ko 1,000 k sath
+                    Rs. {order.totalAmount.toLocaleString()}
                   </td>
                   <td className="px-4 py-2">
                     <span
@@ -106,7 +114,6 @@ export default function OrdersPage() {
                   </td>
                   <td className="px-4 py-2">
                     {new Date(order.createdAt).toLocaleDateString()}
-                    format
                   </td>
                   <td className="px-4 py-2 text-center space-x-2">
                     <button

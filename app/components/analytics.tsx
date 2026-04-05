@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import http from "@/services/http";
 import axios from "axios";
 
+import { OrderByDayChart } from "./charts";
+
 type Analytics = {
   totalOrders: number;
   totalRevenue: number;
@@ -11,9 +13,18 @@ type Analytics = {
   totalProducts: number;
   totalStock: number;
   totalSuppliers: number;
+  ordersByDay: {
+    _id: string;
+    totalOrders: number;
+    totalRevenue: number;
+  }[];
+  productsByCategory: {
+    _id: string;
+    count: number;
+  }[];
 };
 
-export default function AnalyticsDashboard() {
+export default function AnalyticsPage() {
   const [data, setData] = useState<Analytics>({
     totalOrders: 0,
     totalRevenue: 0,
@@ -21,6 +32,8 @@ export default function AnalyticsDashboard() {
     totalProducts: 0,
     totalStock: 0,
     totalSuppliers: 0,
+    ordersByDay: [],
+    productsByCategory: [],
   });
 
   const [loading, setLoading] = useState(true);
@@ -45,11 +58,11 @@ export default function AnalyticsDashboard() {
   }, []);
 
   if (loading) return <p className="p-6 text-center">Loading analytics...</p>;
-  if (error) return <p className="text-red-500 p-6 text-center">{error}</p>;
+  if (error) return <p className="p-6 text-red-500 text-center">{error}</p>;
 
   return (
     <div className="mt-6">
-      {" "}
+      {/* Analytics Cards */}
       <h2 className="font-bold mb-4 text-2xl">Analytics Stats</h2>
       <div className="grid md:grid-cols-3 gap-6">
         <div className="bg-white shadow rounded-xl p-5">
@@ -82,6 +95,13 @@ export default function AnalyticsDashboard() {
         <div className="bg-white shadow rounded-xl p-5">
           <h2 className="text-gray-500">Suppliers</h2>
           <p className="text-2xl font-bold">{data.totalSuppliers}</p>
+        </div>
+      </div>
+
+      <div className="mt-10 grid md:grid-cols-2 gap-6">
+        <div className="bg-white p-5 rounded-xl shadow">
+          <h2 className="font-semibold mb-4">Orders by Day</h2>
+          <OrderByDayChart data={data.ordersByDay} />
         </div>
       </div>
     </div>

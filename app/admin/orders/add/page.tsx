@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import http from "@/services/http";
+import toast from "react-hot-toast";
 
 interface Product {
   _id: string;
@@ -91,16 +92,15 @@ export default function OrderAddPage() {
   const handleCreateOrder = async () => {
     if (!customerName) return alert("Enter customer name");
     if (items.length === 0) return alert("Add at least one product");
-    if (items.some((i) => !i.productId))
-      return alert("Select product for all items");
 
     try {
       setLoading(true);
       setError("");
 
-      await http.post("/orders/create", {
+      const res = await http.post("/orders/create", {
         customerName,
         items: items.map((i) => ({
+          productId: i.productId,
           productName: i.productName,
           quantity: i.quantity,
           price: i.price,
@@ -109,8 +109,12 @@ export default function OrderAddPage() {
         status,
       });
 
-      router.push("/admin/orders");
+      if (res.status === 201) {
+        toast.success("Order created successfully!");
+        router.push("/admin/orders");
+      }
     } catch (err: any) {
+      console.log("ERROR:", err.response?.data || err.message);
       setError(err.response?.data?.msg || "Failed to create order");
     } finally {
       setLoading(false);
