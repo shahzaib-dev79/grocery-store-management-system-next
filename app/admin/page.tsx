@@ -2,6 +2,7 @@
 
 import React from "react";
 import AnalyticsPage from "../components/analytics";
+import { OrderByDayChart } from "../components/charts";
 
 export default function Home() {
   return (
