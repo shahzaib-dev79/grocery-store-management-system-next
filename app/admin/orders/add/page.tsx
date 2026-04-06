@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import http from "@/services/http";
 import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
 
 interface Product {
   _id: string;
@@ -33,6 +34,8 @@ export default function OrderAddPage() {
   >("pending");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
 
   const totalAmount = items.reduce((sum, i) => sum + i.total, 0);
   const fetchProducts = async () => {
@@ -48,6 +51,25 @@ export default function OrderAddPage() {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    if (id) {
+      http.get(`/orders/${id}`).then((res) => {
+        const data = res.data.order;
+
+        setCustomerName(data.customerName);
+        setStatus(data.status);
+        const formattedItems = data.items.map((i: any) => ({
+          productId: i.productId || "",
+          productName: i.productName,
+          quantity: i.quantity,
+          price: i.price,
+          total: i.price * i.quantity,
+        }));
+
+        setItems(formattedItems);
+      });
+    }
+  }, [id]);
   const addItem = () => {
     setItems([
       ...items,
@@ -90,14 +112,14 @@ export default function OrderAddPage() {
   };
 
   const handleCreateOrder = async () => {
-    if (!customerName) return alert("Enter customer name");
-    if (items.length === 0) return alert("Add at least one product");
+    if (!customerName) return toast.error("Enter customer name");
+    if (items.length === 0) return toast.error("Add at least one product");
 
     try {
       setLoading(true);
       setError("");
 
-      const res = await http.post("/orders/create", {
+      const orderData = {
         customerName,
         items: items.map((i) => ({
           productId: i.productId,
@@ -107,15 +129,20 @@ export default function OrderAddPage() {
         })),
         totalAmount,
         status,
-      });
+      };
 
-      if (res.status === 201) {
+      if (id) {
+        await http.put(`/orders/update/${id}`, orderData);
+        toast.success("Order updated successfully!");
+      } else {
+        await http.post("/orders/create", orderData);
         toast.success("Order created successfully!");
-        router.push("/admin/orders");
       }
+
+      router.push("/admin/orders");
     } catch (err: any) {
-      console.log("ERROR:", err.response?.data || err.message);
-      setError(err.response?.data?.msg || "Failed to create order");
+      console.log(err);
+      setError("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -206,7 +233,7 @@ export default function OrderAddPage() {
         disabled={loading}
         className="bg-green-700 text-white px-6 py-2 rounded w-full hover:bg-green-900"
       >
-        {loading ? "Creating..." : "Create Order"}
+        {loading ? "Saving..." : id ? "Update Order" : "Create Order"}
       </button>
     </div>
   );

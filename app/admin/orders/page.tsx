@@ -2,13 +2,16 @@
 
 import { useEffect, useState } from "react";
 import http from "@/services/http";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 type Order = {
   _id: string;
   customerName: string;
+  items: {
+    productName: string;
+    quantity: number;
+  }[];
   totalAmount: number;
   status: string;
   createdAt: string;
@@ -19,18 +22,14 @@ export default function OrdersPage() {
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
+  const [toast, setToast] = useState("");
 
   const fetchOrders = async () => {
     try {
       const res = await http.get("/orders/all");
       setOrders(res.data.orders || []);
-    } catch (err: unknown) {
-      const msg = axios.isAxiosError(err)
-        ? err.response?.data?.msg || err.message
-        : "Error fetching orders";
-      setError(msg);
+    } catch (err) {
+      console.log(err);
     } finally {
       setLoading(false);
     }
@@ -40,111 +39,106 @@ export default function OrdersPage() {
     fetchOrders();
   }, []);
 
-  const updateStatus = async (id: string, status: string) => {
+  const handleUpdate = (order: Order) => {
+    router.push(`/admin/orders/add?id=${order._id}`);
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmDelete = confirm("Are you sure?");
+    if (!confirmDelete) return;
+
     try {
-      await http.put(`/orders/${id}`, { status });
+      await http.delete(`/orders/delete/${id}`);
+      setToast("Order deleted successfully ✅");
       fetchOrders();
+
+      setTimeout(() => setToast(""), 3000);
     } catch {
-      alert("Failed to update status");
+      setToast("Delete failed ");
     }
   };
 
-  const filteredOrders = orders.filter((order) =>
-    order.customerName.toLowerCase().includes(search.toLowerCase()),
-  );
-
-  if (loading) return <p className="p-6 text-center">Loading orders...</p>;
+  if (loading) return <p className="p-6 text-center">Loading...</p>;
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="mb-4">
-        <button
-          onClick={() => router.push("/admin")}
-          className="bg-gray-200 hover:bg-gray-500 hover:text-white text-gray-700 px-4 py-2 rounded-lg transition"
-        >
-          <ArrowLeft size={18} />
-        </button>
-      </div>
-      <h1 className="text-2xl font-bold mb-6 mt-8">Order Management</h1>
+    <div className="max-w-7xl mx-auto">
+      {toast && (
+        <div className="fixed top-5 right-5 bg-black text-white px-4 py-2 rounded">
+          {toast}
+        </div>
+      )}
+
+      <button
+        onClick={() => router.push("/admin")}
+        className="bg-gray-200 px-4 py-2 rounded mb-5 "
+      >
+        <ArrowLeft size={18} />
+      </button>
+
+      <h1 className="text-2xl font-bold mb-4">Order Management</h1>
+
       <div className="flex justify-end mb-4">
         <button
           onClick={() => router.push("/admin/orders/add")}
-          className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-900 "
+          className="bg-green-700 text-white px-4 py-2 rounded mb-3"
         >
           Create Order
         </button>
       </div>
 
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+      <table className="w-full bg-white shadow rounded">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="p-2 text-left">Customer Name</th>
+            <th className="p-2 text-left">Product</th>
+            <th className="p-2 text-left">Quantity</th>
+            <th className="p-2 text-left">Amount</th>
+            <th className="p-2 text-left">Status</th>
+            <th className="p-2 text-left">Date</th>
+            <th className="p-2 text-center">Actions</th>
+          </tr>
+        </thead>
 
-      <div className="bg-white shadow rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
-            {" "}
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-4 py-2 text-left">Customer</th>
-                <th className="px-4 py-2 text-left">Amount</th>
-                <th className="px-4 py-2 text-left">Status</th>
-                <th className="px-4 py-2 text-left">Date</th>
-                <th className="px-4 py-2 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredOrders.map((order) => (
-                <tr key={order._id} className="border-t">
-                  <td className="px-4 py-2">{order.customerName}</td>
-                  <td className="px-4 py-2">
-                    Rs. {order.totalAmount.toLocaleString()}
-                  </td>
-                  <td className="px-4 py-2">
-                    <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${
-                        order.status === "delivered"
-                          ? "bg-green-100 text-green-600"
-                          : order.status === "processed"
-                            ? "bg-blue-100 text-blue-600"
-                            : order.status === "cancelled"
-                              ? "bg-red-100 text-red-600"
-                              : "bg-gray-100 text-gray-600"
-                      }`}
-                    >
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2">
-                    {new Date(order.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-2 text-center space-x-2">
-                    <button
-                      onClick={() => updateStatus(order._id, "processed")}
-                      className="px-3 py-1 bg-blue-500 text-white rounded"
-                    >
-                      Process
-                    </button>
-                    <button
-                      onClick={() => updateStatus(order._id, "delivered")}
-                      className="px-3 py-1 bg-green-500 text-white rounded"
-                    >
-                      Deliver
-                    </button>
-                    <button
-                      onClick={() => updateStatus(order._id, "cancelled")}
-                      className="px-3 py-1 bg-red-500 text-white rounded"
-                    >
-                      Cancel
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <tbody>
+          {orders.map((order) => (
+            <tr key={order._id} className="border-t">
+              <td className="p-2">{order.customerName}</td>
 
-        {filteredOrders.length === 0 && (
-          <p className="p-4 text-center text-gray-500">No orders found</p>
-        )}
-      </div>
+              <td className="p-2">{order.items[0]?.productName || "N/A"}</td>
+
+              <td className="p-2">{order.items[0]?.quantity || 0}</td>
+
+              <td className="p-2">Rs. {order.totalAmount}</td>
+
+              <td className="p-2">{order.status}</td>
+
+              <td className="p-2">
+                {new Date(order.createdAt).toLocaleDateString()}
+              </td>
+
+              <td className="p-2 text-center space-x-2">
+                <button
+                  onClick={() => handleUpdate(order)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded"
+                >
+                  Update
+                </button>
+
+                <button
+                  onClick={() => handleDelete(order._id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {orders.length === 0 && (
+        <p className="p-4 text-center text-gray-500">No orders found</p>
+      )}
     </div>
   );
 }
