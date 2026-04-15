@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useSearchParams } from "next/navigation";
 
 interface Product {
+  stock: number;
   _id: string;
   name: string;
   price: number;
@@ -112,8 +113,29 @@ export default function OrderAddPage() {
   };
 
   const handleCreateOrder = async () => {
-    if (!customerName) return toast.error("Enter customer name");
-    if (items.length === 0) return toast.error("Add at least one product");
+    if (!customerName) {
+      toast.error("Enter customer name");
+      return;
+    }
+
+    if (items.length === 0) {
+      toast.error("Add at least one product");
+      return;
+    }
+
+    const hasInvalidStock = items.some((item) => {
+      const product = products.find((p) => p._id === item.productId);
+
+      if (!item.productId) return true;
+      if (!product) return true;
+
+      return item.quantity > product.stock;
+    });
+
+    if (hasInvalidStock) {
+      toast.error("Insufficient stock ❌");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -140,8 +162,9 @@ export default function OrderAddPage() {
       }
 
       router.push("/admin/orders");
-    } catch (err: any) {
+    } catch (err) {
       console.log(err);
+      toast.error("Something went wrong");
       setError("Something went wrong");
     } finally {
       setLoading(false);
@@ -165,35 +188,49 @@ export default function OrderAddPage() {
       </div>
 
       {items.map((item, idx) => (
-        <div key={idx} className="grid grid-cols-5 gap-2 mb-2 items-end">
+        <div
+          key={idx}
+          className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-3 items-end"
+        >
           <select
             value={item.productId}
             onChange={(e) => updateItem(idx, "productId", e.target.value)}
             className="border p-2 rounded col-span-2"
           >
             <option value="">Select Product</option>
+
             {products.map((p) => (
-              <option key={p._id} value={p._id}>
-                {p.name} (Rs. {p.price})
+              <option key={p._id} value={p._id} disabled={p.stock === 0}>
+                {p.name}
               </option>
             ))}
           </select>
-          <input
-            type="number"
-            min={1}
-            value={item.quantity}
-            onChange={(e) =>
-              updateItem(idx, "quantity", Number(e.target.value))
-            }
-            className="border p-2 rounded"
-          />
-          <input
-            type="number"
-            min={0}
-            value={item.price}
-            onChange={(e) => updateItem(idx, "price", Number(e.target.value))}
-            className="border p-2 rounded"
-          />
+
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500 mb-1">Quantity</span>
+
+            <input
+              type="number"
+              min={1}
+              value={item.quantity}
+              onChange={(e) =>
+                updateItem(idx, "quantity", Number(e.target.value))
+              }
+              className="border p-2 rounded"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500 mb-1">Price</span>
+
+            <input
+              type="number"
+              min={0}
+              value={item.price}
+              onChange={(e) => updateItem(idx, "price", Number(e.target.value))}
+              className="border p-2 rounded"
+            />
+          </div>
 
           {items.length > 1 && (
             <button
